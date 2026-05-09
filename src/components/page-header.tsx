@@ -26,13 +26,13 @@ const PageHeader = ({
   onNewDeploy,
 }: PageHeaderProps) => {
   return (
-    <header className="bg-surface/80 border-line-neutral sticky top-0 z-10 flex items-center gap-3 border-b px-4 py-3.75 backdrop-blur-md backdrop-saturate-150">
+    <header className="bg-surface/80 border-line-neutral sticky top-0 z-10 flex h-17.5 items-center gap-3 border-b px-4 backdrop-blur-md backdrop-saturate-150">
       {/* Breadcrumbs + Title */}
 
       <div className="flex min-w-0 flex-1 flex-col gap-1">
         <div className="text-ink-4 flex items-center gap-1 text-[11px]">
           {breadcrumbs.map((crumb, index) => (
-            <span key={index} className="flex items-center gap-1">
+            <span key={crumb.label} className="flex items-center gap-1">
               {index > 0 && <ChevronRight size={9} className="text-ink-5" />}
               {crumb.href ? (
                 <Link

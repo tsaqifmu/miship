@@ -95,8 +95,8 @@ function RootDocument({ children }: { readonly children: React.ReactNode }) {
         handleNewDeployRef.current()
       }
     }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
+    globalThis.addEventListener('keydown', onKey)
+    return () => globalThis.removeEventListener('keydown', onKey)
   }, [])
 
   const meta = PAGE_META[location.pathname] ?? {

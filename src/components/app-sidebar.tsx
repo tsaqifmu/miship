@@ -26,7 +26,7 @@ const navItems = [
 export function AppSidebar() {
   return (
     <Sidebar className="border-line-neutral border-r">
-      <SidebarHeader className="border-line-neutral border-b px-5 py-4.5">
+      <SidebarHeader className="border-line-neutral flex h-17.5 justify-center border-b px-5">
         <div className="flex items-center gap-2.25">
           <span className="bg-brand-50 text-brand inline-flex h-7 w-7 items-center justify-center rounded-[7px] shadow-[inset_0_0_0_0.5px_var(--line-brand-strong)]">
             <ShipIcon size={17} />
