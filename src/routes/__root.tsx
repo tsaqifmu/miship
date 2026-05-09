@@ -11,6 +11,8 @@ import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 import appCss from '../styles.css?url'
 
 import type { QueryClient } from '@tanstack/react-query'
+import { SidebarProvider, SidebarTrigger } from '#/components/ui/sidebar'
+import { AppSidebar } from '#/components/app-sidebar'
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -42,7 +44,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
   shellComponent: RootDocument,
 })
 
-function RootDocument({ children }: { children: React.ReactNode }) {
+function RootDocument({ children }: { readonly children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -50,7 +52,13 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body className="font-sans antialiased wrap-anywhere ">
+        <SidebarProvider>
+      <AppSidebar />
+      <main>
+        <SidebarTrigger />
         {children}
+      </main>
+    </SidebarProvider>
         <TanStackDevtools
           config={{
             position: 'bottom-right',
