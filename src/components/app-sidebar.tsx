@@ -25,17 +25,17 @@ const navItems = [
 
 export function AppSidebar() {
   return (
-    <Sidebar>
-      <SidebarHeader className="border-b px-5 py-4.5">
+    <Sidebar className="border-line-neutral border-r">
+      <SidebarHeader className="border-line-neutral border-b px-5 py-4.5">
         <div className="flex items-center gap-2.25">
-          <span className="inline-flex h-7 w-7 items-center justify-center rounded-[7px] bg-emerald-50 text-emerald-700 shadow-[inset_0_0_0_0.5px_rgba(15,110,86,0.2)]">
+          <span className="bg-brand-50 text-brand inline-flex h-7 w-7 items-center justify-center rounded-[7px] shadow-[inset_0_0_0_0.5px_var(--line-brand-strong)]">
             <ShipIcon size={17} />
           </span>
           <div className="flex flex-col justify-center leading-[1.1]">
-            <span className="text-sm font-semibold tracking-[-0.015em]">
+            <span className="text-ink text-sm font-semibold tracking-[-0.015em]">
               MiShip
             </span>
-            <span className="mt-0.5 font-mono text-[10.5px] text-[#98989f]">
+            <span className="text-ink-4 mt-0.5 font-mono text-[10.5px]">
               v2.4.1
             </span>
           </div>
@@ -43,40 +43,47 @@ export function AppSidebar() {
       </SidebarHeader>
 
       <SidebarContent>
+        {/* Workspace selector */}
         <SidebarGroup className="px-4 pt-3 pb-2">
           <SidebarGroupContent>
-            <div className="flex cursor-pointer items-center gap-2.25 rounded-[7px] bg-[#fafaf9] px-[9px] py-[7px] shadow-[0_0_0_0.5px_rgba(0,0,0,0.08)] dark:bg-slate-900 dark:shadow-[0_0_0_0.5px_rgba(255,255,255,0.08)]">
-              <span className="flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded-[4px] bg-gradient-to-br from-[#0F6E56] to-[#1a8d72] text-[9.5px] font-bold text-white">
+            <div className="bg-surface-hover flex cursor-pointer items-center gap-2.25 rounded-[7px] px-2.25 py-1.75 shadow-[0_0_0_0.5px_var(--line-neutral)]">
+              <span className="from-brand to-brand-mid flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded-lg bg-linear-to-br text-[9.5px] font-bold text-white">
                 MF
               </span>
               <div className="flex min-w-0 flex-1 flex-col leading-[1.2]">
-                <span className="text-[12.5px] font-medium">MIFI-APP</span>
-                <span className="text-[10.5px] text-[#98989f]">FE Manager</span>
+                <span className="text-ink-1 text-[12.5px] font-medium">
+                  MIFI-APP
+                </span>
+                <span className="text-ink-4 text-[10.5px]">FE Manager</span>
               </div>
-              <ChevronDownIcon size={13} className="shrink-0 text-[#98989f]" />
+              <ChevronDownIcon size={13} className="text-ink-4 shrink-0" />
             </div>
           </SidebarGroupContent>
         </SidebarGroup>
 
+        {/* Nav */}
         <SidebarGroup className="px-4">
-          <SidebarGroupLabel className="text-[10.5px] font-semibold text-[#98989f]">
+          <SidebarGroupLabel className="text-ink-4 px-2.5 pb-1 text-[10.5px] font-semibold tracking-[0.06em]">
             WORKSPACE
           </SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu>
+            <SidebarMenu className="gap-0.5 overflow-visible">
               {navItems.map(({ icon: Icon, label, href }) => (
-                <SidebarMenuItem key={label}>
+                <SidebarMenuItem key={label} className="overflow-visible">
                   <SidebarMenuButton
                     asChild
-                    className="text-[#4a4a4f] hover:bg-[#f7f7f5] data-[active=true]:bg-[#ecf7f2] data-[active=true]:font-semibold data-[active=true]:text-[#0a5a46] data-[active=true]:shadow-[inset_0_0_0_0.5px_rgba(15,110,86,0.18)] dark:hover:bg-slate-800 dark:data-[active=true]:bg-emerald-950/30 dark:data-[active=true]:text-emerald-400"
+                    className="text-ink-2 hover:text-ink-1 data-[active=true]:bg-brand-50 data-[active=true]:text-brand-dark overflow-visible rounded-[7px] transition-colors duration-120 hover:bg-[#f7f7f5] data-[active=true]:font-semibold data-[active=true]:shadow-[inset_0_0_0_0.5px_var(--line-brand)]"
                   >
                     <Link
                       to={href}
                       activeOptions={{ exact: href === '/' }}
                       activeProps={{ 'data-active': 'true' }}
                       inactiveProps={{ 'data-active': undefined }}
+                      className="before:bg-brand relative before:absolute before:top-1.5 before:bottom-1.5 before:-left-4 before:w-0.5 before:rounded-none before:opacity-0 before:transition-opacity before:content-[''] data-[active=true]:before:opacity-100"
                     >
-                      <Icon size={15} />
+                      <span className="text-ink-3 in-data-[active=true]:text-brand duration-120ms transition-colors">
+                        <Icon size={15} />
+                      </span>
                       <span>{label}</span>
                     </Link>
                   </SidebarMenuButton>
@@ -88,29 +95,31 @@ export function AppSidebar() {
       </SidebarContent>
 
       <SidebarFooter className="gap-0 p-0">
+        {/* Quick action card */}
         <div className="px-4 pb-3">
-          <div className="rounded-xl bg-[linear-gradient(180deg,rgba(15,110,86,0.04),rgba(15,110,86,0.01))] px-2.75 py-2.5 shadow-[0_0_0_0.5px_rgba(15,110,86,0.18)]">
+          <div className="rounded-lg bg-[linear-gradient(180deg,rgba(15,110,86,0.04),rgba(15,110,86,0.01))] px-2.75 py-2.5 shadow-[0_0_0_0.5px_var(--line-brand)]">
             <div className="mb-1 flex items-center gap-1.5">
-              <ActivityIcon size={12} className="text-emerald-600" />
-              <span className="text-[11px] font-semibold tracking-[-0.005em] text-emerald-700">
+              <ActivityIcon size={12} className="text-brand" />
+              <span className="text-brand-dark text-[11px] font-semibold tracking-[-0.005em]">
                 System healthy
               </span>
             </div>
-            <p className="text-[11px] leading-[1.45] text-[#98989f]">
+            <p className="text-ink-3 text-[11px] leading-[1.45]">
               2 of 4 environments running. Last sync{' '}
               <span className="font-mono">2m</span> ago.
             </p>
           </div>
         </div>
 
-        <div className="flex items-center justify-between border-t px-5 py-3">
-          <div className="flex items-center gap-1.75">
-            <span className="h-1.75 w-1.75 rounded-full bg-emerald-500 shadow-[0_0_0_3px_rgba(15,110,86,0.18)]" />
-            <span className="text-[11.5px] font-medium">Connected</span>
-            <span className="text-[#98989f]">·</span>
-            <span className="font-mono text-[10.5px] text-[#98989f]">
-              SSO ok
+        {/* Network status */}
+        <div className="border-line-neutral flex items-center justify-between border-t px-5 py-3">
+          <div className="text-ink-3 flex items-center gap-1.75">
+            <span className="bg-running h-1.75 w-1.75 rounded-full shadow-[0_0_0_3px_var(--running-bg)]" />
+            <span className="text-ink-2 text-[11.5px] font-medium">
+              Connected
             </span>
+            <span className="text-ink-4">·</span>
+            <span className="text-ink-4 font-mono text-[10.5px]">SSO ok</span>
           </div>
           <ThemeToggle />
         </div>
