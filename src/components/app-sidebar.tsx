@@ -114,7 +114,10 @@ export function AppSidebar() {
         {/* Network status */}
         <div className="border-line-neutral flex items-center justify-between border-t px-5 py-3">
           <div className="text-ink-3 flex items-center gap-1.75">
-            <span className="bg-running h-1.75 w-1.75 rounded-full shadow-[0_0_0_3px_var(--running-bg)]" />
+            <span className="relative flex size-2">
+              <span className="bg-running absolute inline-flex h-full w-full animate-ping rounded-full opacity-75"></span>
+              <span className="bg-running relative inline-flex size-2 rounded-full"></span>
+            </span>
             <span className="text-ink-2 text-[11.5px] font-medium">
               Connected
             </span>
