@@ -55,9 +55,9 @@ function MetaCell({
 }
 
 const EnvCard = ({ env, onAction }: EnvCardProps) => {
-  const isRunning = env.status === 'running'
-  const isStopped = env.status === 'stopped'
-  const isMissing = env.status === 'not_found'
+  const isRunning = env.containerStatus === 'running'
+  const isStopped = env.containerStatus === 'stopped'
+  const isMissing = env.containerStatus === 'not_found'
 
   let stripeBackground = 'transparent'
   if (isRunning)
@@ -100,7 +100,7 @@ const EnvCard = ({ env, onAction }: EnvCardProps) => {
             </span>
           </div>
         </div>
-        <StatusPill status={env.status} />
+        <StatusPill status={env.containerStatus} />
       </div>
 
       {/* 3. Branch + commit */}
@@ -111,19 +111,23 @@ const EnvCard = ({ env, onAction }: EnvCardProps) => {
             {env.branch}
           </span>
           <span className="text-ink-3 bg-surface rounded px-1.5 py-px font-mono text-[11px] shadow-[0_0_0_0.5px_var(--line-neutral)]">
-            {env.commit}
+            {env.commitHash}
           </span>
         </div>
         <p className="text-ink-2 mt-2 line-clamp-2 pl-0.5 text-[12px] leading-normal">
-          <span className="text-ink-4 font-medium">—</span> {env.message}
+          <span className="text-ink-4 font-medium">—</span> {env.commitMessage}
         </p>
       </div>
 
       {/* 4. Meta strip */}
       <div className="grid grid-cols-3 px-4 py-2.5 shadow-[inset_0_0.5px_0_var(--line-neutral)]">
         <MetaCell label="Port" value={String(env.port)} mono />
-        <MetaCell label="Last deploy" value={env.lastDeploy} align="center" />
-        <MetaCell label="Uptime" value={env.uptime} mono align="right" />
+        <MetaCell
+          label="Last deploy"
+          value={env.lastDeploy ?? '-'}
+          align="center"
+        />
+        <MetaCell label="Uptime" value={env.uptime ?? '-'} mono align="right" />
       </div>
 
       {/* 5. Actions */}

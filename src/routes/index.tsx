@@ -1,6 +1,7 @@
 import EnvCard from '#/components/dashboard/env-card'
 import StatCard from '#/components/dashboard/stat-card'
-import { MOCK_ENVIRONMENTS } from '#/data/mock'
+import { environmentsQueryOptions } from '#/lib/queries/environments'
+import { useQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import {
   ActivityIcon,
@@ -9,10 +10,17 @@ import {
   RocketIcon,
 } from 'lucide-react'
 
-export const Route = createFileRoute('/')({ component: Dashboard })
+export const Route = createFileRoute('/')({
+  loader: ({ context: { queryClient } }) =>
+    queryClient.ensureQueryData(environmentsQueryOptions),
+  component: Dashboard,
+})
 
 function Dashboard() {
-  const envs = MOCK_ENVIRONMENTS
+  const { data: envs = [] } = useQuery(environmentsQueryOptions)
+
+  console.log('ini data', envs)
+
   const counts = {
     running: envs.filter((e) => e.status === 'running').length,
     stopped: envs.filter((e) => e.status === 'stopped').length,
@@ -79,7 +87,7 @@ function Dashboard() {
 
       <div className="grid grid-cols-2 gap-3.5">
         {envs.map((env) => (
-          <EnvCard key={env.id} env={env} />
+          <EnvCard key={env.name} env={env} />
         ))}
       </div>
     </div>
