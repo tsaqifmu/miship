@@ -22,9 +22,9 @@ function Dashboard() {
   console.log('ini data', envs)
 
   const counts = {
-    running: envs.filter((e) => e.status === 'running').length,
-    stopped: envs.filter((e) => e.status === 'stopped').length,
-    notfound: envs.filter((e) => e.status === 'not_found').length,
+    running: envs.filter((e) => e.containerStatus === 'running').length,
+    stopped: envs.filter((e) => e.containerStatus === 'stopped').length,
+    notfound: envs.filter((e) => e.containerStatus === 'not_found').length,
   }
   return (
     <div className="flex flex-col gap-4.5 px-6 py-5 pb-10">
