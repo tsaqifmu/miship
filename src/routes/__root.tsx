@@ -11,6 +11,7 @@ import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 
 import appCss from '../styles.css?url'
 
+import { useQueryClient } from '@tanstack/react-query'
 import type { QueryClient } from '@tanstack/react-query'
 import { SidebarProvider } from '#/components/ui/sidebar'
 import { AppSidebar } from '#/components/app-sidebar'
@@ -70,11 +71,13 @@ const PAGE_META: Record<string, { title: string; breadcrumbs: Breadcrumb[] }> =
 
 function RootDocument({ children }: { readonly children: React.ReactNode }) {
   const location = useLocation()
+  const queryClient = useQueryClient()
   const [network] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
 
   const handleRefresh = () => {
     setRefreshing(true)
+    queryClient.invalidateQueries()
     setTimeout(() => setRefreshing(false), 900)
   }
 
