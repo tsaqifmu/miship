@@ -11,7 +11,8 @@ import {
   PowerIcon,
   RocketIcon,
 } from 'lucide-react'
-import { useState } from 'react'
+
+import { useDeployModal } from '#/contexts/deploy-modal-context'
 
 export const Route = createFileRoute('/')({
   loader: ({ context: { queryClient } }) =>
@@ -20,15 +21,15 @@ export const Route = createFileRoute('/')({
 })
 
 function Dashboard() {
+  const { open } = useDeployModal()
   const { data: envs = [] } = useQuery(environmentsQueryOptions)
-  const { refresh, restart, start, stop } = useEnvironmentActions()
-  const [deployTarget, setDeployTarget] = useState<Env | null>(null)
+  const { restart, start, stop } = useEnvironmentActions()
 
   const handleAction = (action: EnvAction, env: Env) => {
     if (action === 'restart') restart.mutate(env.name)
     if (action === 'start') start.mutate(env.name)
     if (action === 'stop') stop.mutate(env.name)
-    if (action === 'deploy') setDeployTarget(env)
+    if (action === 'deploy') open(env)
   }
 
   const counts = {

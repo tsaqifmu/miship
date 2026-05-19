@@ -19,6 +19,11 @@ import type { Breadcrumb } from '#/components/page-header'
 import { useEffect, useRef, useState } from 'react'
 import PageHeader from '#/components/page-header'
 
+import {
+  DeployModalProvider,
+  useDeployModal,
+} from '#/contexts/deploy-modal-context'
+
 interface MyRouterContext {
   queryClient: QueryClient
 }
@@ -70,43 +75,6 @@ const PAGE_META: Record<string, { title: string; breadcrumbs: Breadcrumb[] }> =
   }
 
 function RootDocument({ children }: { readonly children: React.ReactNode }) {
-  const location = useLocation()
-  const queryClient = useQueryClient()
-  const [network] = useState(true)
-  const [refreshing, setRefreshing] = useState(false)
-
-  const handleRefresh = () => {
-    setRefreshing(true)
-    queryClient.invalidateQueries()
-    setTimeout(() => setRefreshing(false), 900)
-  }
-
-  const handleNewDeploy = () => {
-    // nanti: setModalOpen(true)
-    console.log('open new deploy modal')
-  }
-
-  const handleNewDeployRef = useRef(handleNewDeploy)
-  useEffect(() => {
-    handleNewDeployRef.current = handleNewDeploy
-  })
-
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === 'n') {
-        e.preventDefault()
-        handleNewDeployRef.current()
-      }
-    }
-    globalThis.addEventListener('keydown', onKey)
-    return () => globalThis.removeEventListener('keydown', onKey)
-  }, [])
-
-  const meta = PAGE_META[location.pathname] ?? {
-    title: location.pathname,
-    breadcrumbs: [{ label: 'MIFI-APP' }],
-  }
-
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -114,20 +82,9 @@ function RootDocument({ children }: { readonly children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body className="font-sans wrap-anywhere antialiased">
-        <SidebarProvider>
-          <AppSidebar />
-          <main className="flex min-h-0 min-w-0 flex-1 flex-col overflow-y-auto">
-            <PageHeader
-              title={meta.title}
-              breadcrumbs={meta.breadcrumbs}
-              network={network}
-              refreshing={refreshing}
-              onRefresh={handleRefresh}
-              onNewDeploy={handleNewDeploy}
-            />
-            {children}
-          </main>
-        </SidebarProvider>
+        <DeployModalProvider>
+          <RootLayout>{children}</RootLayout>
+        </DeployModalProvider>
         <TanStackDevtools
           config={{
             position: 'bottom-right',
@@ -143,5 +100,56 @@ function RootDocument({ children }: { readonly children: React.ReactNode }) {
         <Scripts />
       </body>
     </html>
+  )
+}
+
+function RootLayout({ children }: { children: React.ReactNode }) {
+  const { open } = useDeployModal()
+  const location = useLocation()
+  const queryClient = useQueryClient()
+  const [network] = useState(true)
+  const [refreshing, setRefreshing] = useState(false)
+
+  const handleRefresh = () => {
+    setRefreshing(true)
+    queryClient.invalidateQueries()
+    setTimeout(() => setRefreshing(false), 900)
+  }
+
+  const openRef = useRef(open)
+  useEffect(() => {
+    openRef.current = open
+  })
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'n') {
+        e.preventDefault()
+        openRef.current()
+      }
+    }
+    globalThis.addEventListener('keydown', onKey)
+    return () => globalThis.removeEventListener('keydown', onKey)
+  }, [])
+
+  const meta = PAGE_META[location.pathname] ?? {
+    title: location.pathname,
+    breadcrumbs: [{ label: 'MIFI-APP' }],
+  }
+  return (
+    <SidebarProvider>
+      <AppSidebar />
+      <main className="flex min-h-0 min-w-0 flex-1 flex-col overflow-y-auto">
+        <PageHeader
+          title={meta.title}
+          breadcrumbs={meta.breadcrumbs}
+          network={network}
+          refreshing={refreshing}
+          onRefresh={handleRefresh}
+          onNewDeploy={() => open()}
+        />
+        {children}
+      </main>
+    </SidebarProvider>
   )
 }
