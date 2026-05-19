@@ -1,6 +1,8 @@
 import EnvCard from '#/components/dashboard/env-card'
 import StatCard from '#/components/dashboard/stat-card'
+import { useEnvironmentActions } from '#/hooks/use-environment-actions'
 import { environmentsQueryOptions } from '#/lib/queries/environments'
+import type { Environment as Env, EnvAction } from '#/types/environment'
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import {
@@ -9,6 +11,7 @@ import {
   PowerIcon,
   RocketIcon,
 } from 'lucide-react'
+import { useState } from 'react'
 
 export const Route = createFileRoute('/')({
   loader: ({ context: { queryClient } }) =>
@@ -18,8 +21,15 @@ export const Route = createFileRoute('/')({
 
 function Dashboard() {
   const { data: envs = [] } = useQuery(environmentsQueryOptions)
+  const { refresh, restart, start, stop } = useEnvironmentActions()
+  const [deployTarget, setDeployTarget] = useState<Env | null>(null)
 
-  console.log('ini data', envs)
+  const handleAction = (action: EnvAction, env: Env) => {
+    if (action === 'restart') restart.mutate(env.name)
+    if (action === 'start') start.mutate(env.name)
+    if (action === 'stop') stop.mutate(env.name)
+    if (action === 'deploy') setDeployTarget(env)
+  }
 
   const counts = {
     running: envs.filter((e) => e.containerStatus === 'running').length,
@@ -87,7 +97,7 @@ function Dashboard() {
 
       <div className="grid grid-cols-2 gap-3.5">
         {envs.map((env) => (
-          <EnvCard key={env.name} env={env} />
+          <EnvCard key={env.name} env={env} onAction={handleAction} />
         ))}
       </div>
     </div>

@@ -1,5 +1,5 @@
 import { cn } from '#/lib/utils'
-import type { Environment } from '#/types/environment'
+import type { EnvAction, Environment } from '#/types/environment'
 import {
   GitBranchIcon,
   Play,
@@ -14,10 +14,7 @@ import { Button } from '../ui/button'
 
 interface EnvCardProps {
   env: Environment
-  onAction?: (
-    action: 'deploy' | 'logs' | 'restart' | 'start' | 'stop',
-    env: Environment,
-  ) => void
+  onAction?: (action: EnvAction, env: Environment) => void
 }
 
 function MetaCell({
